@@ -2,16 +2,15 @@
 
 const video = document.querySelector('video');
 const canvas = window.canvas = document.querySelector('canvas');
+const fx = document.getElementById("fx");
+const ctxCanvas = canvas.getContext("2d");
+const ctxFx = fx.getContext("2d");
+
 canvas.width = 300;
 canvas.height = 200;
 
-const fx = document.getElementById("fx");
-
 fx.width = 300*4;
 fx.height = 200*4;
-
-var ctxCanvas = canvas.getContext("2d");
-var ctxFx = fx.getContext("2d");
 
 var bbb = 0;
 
@@ -27,14 +26,14 @@ function takepicture() {
 
     var th = 200;
 
+	var imgDataOld = ctxCanvas.getImageData(0,0,300,200);
+
     for (var x = 0; x < canvas.width; x++) {
         for (var y = 0; y < canvas.height; y++) {
 
-            var imgDataOld = ctxCanvas.getImageData(x, y, 1, 1);
-            
-			var r = imgDataOld.data[0];
-            var g = imgDataOld.data[1];
-            var b = imgDataOld.data[2];
+			var r = imgDataOld.data[((y * (imgDataOld.width * 4)) + (x * 4)) + 0];
+			var g = imgDataOld.data[((y * (imgDataOld.width * 4)) + (x * 4)) + 1];
+			var b = imgDataOld.data[((y * (imgDataOld.width * 4)) + (x * 4)) + 2];
 
             ctxFx.fillStyle = "rgba(" +
                 (Math.abs(r - rt) < th ? 255 : 0) +
@@ -56,7 +55,6 @@ function takepicture() {
 				if (d>=x*4) {
 					d = 0; 
             }
-			
             ctxFx.fillRect(x*4-d, y*4, 4+d, 4);
         }
     }
