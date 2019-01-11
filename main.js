@@ -28,15 +28,16 @@ function takepicture() {
         gt = 0,
         bt = 0;
 
+    var th = 200;
+
     for (var x = 0; x < canvas.width; x++) {
         for (var y = 0; y < canvas.height; y++) {
 
             var imgDataOld = ctxCanvas.getImageData(x, y, 1, 1);
-            var r = imgDataOld.data[0];
+            
+			var r = imgDataOld.data[0];
             var g = imgDataOld.data[1];
             var b = imgDataOld.data[2];
-
-            var th = 200;
 
             ctxFx.fillStyle = "rgba(" +
                 (Math.abs(r - rt) < th ? 255 : 0) +
@@ -46,17 +47,20 @@ function takepicture() {
                 (Math.abs(b - bt) < th ? 255 : 0) +
                 ",255)";
 
-            if (bbb % 48 < 36) {
-                rt |= b;
-                gt |= r;
-                bt |= g;
-            } else {
-                rt ^= b;
-                gt ^= r;
-                bt ^= g;
-            }
+            rt |= b;
+            gt |= r;
+            bt |= g;
 
-            ctxFx.fillRect(x*4, y*4, 4, 4);
+			var d = (Math.abs(r - rt) + Math.abs(g - gt) + Math.abs(b - bt)) / 2.5;
+
+            if (bbb % 48 > 24) {
+				d = 0;
+            } else 
+				if (d>=x*4) {
+					d = 0; 
+            }
+			
+            ctxFx.fillRect(x*4-d, y*4, 4+d, 4);
         }
     }
 
