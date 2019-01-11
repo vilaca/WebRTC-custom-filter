@@ -10,17 +10,14 @@ const fx = document.getElementById("fx");
 fx.width = 300*4;
 fx.height = 200*4;
 
-canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+var ctxCanvas = canvas.getContext("2d");
+var ctxFx = fx.getContext("2d");
 
 var bbb = 0;
 
 function takepicture() {
 
-    var ctxCanvas = canvas.getContext("2d");
-
-    canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-
-    var ctxFx = fx.getContext("2d");
+    ctxCanvas.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     bbb++;
 
