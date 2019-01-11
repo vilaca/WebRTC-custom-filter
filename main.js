@@ -7,8 +7,8 @@ canvas.height = 200;
 
 const fx = document.getElementById("fx");
 
-fx.width = 300;
-fx.height = 200;
+fx.width = 300*4;
+fx.height = 200*4;
 
 canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
 
@@ -56,7 +56,7 @@ function takepicture() {
                 bt ^= g;
             }
 
-            ctxFx.fillRect(x, y, 1, 1);
+            ctxFx.fillRect(x*4, y*4, 4, 4);
         }
     }
 
