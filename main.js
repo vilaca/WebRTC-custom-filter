@@ -1,4 +1,3 @@
-
 'use strict';
 
 const canvas = window.canvas = document.querySelector('canvas');
@@ -8,18 +7,19 @@ const fx = document.getElementById("fx");
 const ctxCanvas = canvas.getContext("2d");
 const ctxFx = fx.getContext("2d");
 
-const width = 320;
-const height = 240;
-const stretch = 4;
+const width = 800;
+const height = 600;
 
 canvas.height = height;
 canvas.width = width;
 
-fx.height = height * stretch;
-fx.width = width * stretch;
+fx.height = height;
+fx.width = width;
 
 const th = 200;
 var bbb = 0;
+
+const noob = ctxFx.getImageData(0, 0, width, height);
 
 function takepicture() {
 
@@ -31,27 +31,29 @@ function takepicture() {
         gt = 0,
         bt = 0;
 
-	const latest = ctxCanvas.getImageData(0,0,width,height);
+    const latest = ctxCanvas.getImageData(0, 0, width, height);
 
     for (var x = 0; x < canvas.width; x++) {
         for (var y = 0; y < canvas.height; y++) {
 
-			var idx = y * (width * 4) + (x * 4);
-			
-			var r = latest.data[idx];
-			var g = latest.data[++idx];
-			var b = latest.data[++idx];
+            const idx = y * (width * 4) + (x * 4);
 
-            ctxFx.fillStyle = "rgba(" + (Math.abs(r - rt) < th ? 255 : 0) + "," + (Math.abs(g - gt) < th ? 255 : 0) + "," + (Math.abs(b - bt) < th ? 255 : 0) + ",255)";
+            var r = latest.data[idx];
+            var g = latest.data[idx + 1];
+            var b = latest.data[idx + 2];
+
+            noob.data[idx] = (Math.abs(r - rt) < th ? 255 : 0);
+            noob.data[idx + 1] = (Math.abs(g - gt) < th ? 255 : 0);
+            noob.data[idx + 2] = (Math.abs(b - bt) < th ? 255 : 0);
+            noob.data[idx + 3] = 255;
 
             rt |= b;
             gt |= r;
             bt |= g;
-			
-			ctxFx.fillRect(x * stretch, y * stretch,  stretch,  stretch);
-		}
+        }
     }
 
+    ctxFx.putImageData(noob, 0, 0);
 };
 
 setInterval(takepicture, 20);
