@@ -36,16 +36,17 @@ function takepicture() {
     for (var x = 0; x < canvas.width; x++) {
         for (var y = 0; y < canvas.height; y++) {
 
-            const idx = y * (width * 4) + (x * 4);
+            var inp = y * (width * 4) + (x * 4);
 
-            var r = latest.data[idx];
-            var g = latest.data[idx + 1];
-            var b = latest.data[idx + 2];
+            const r = latest.data[inp];
+            const g = latest.data[++inp];
+            const b = latest.data[++inp];
 
-            noob.data[idx] = (Math.abs(r - rt) < th ? 255 : 0);
-            noob.data[idx + 1] = (Math.abs(g - gt) < th ? 255 : 0);
-            noob.data[idx + 2] = (Math.abs(b - bt) < th ? 255 : 0);
-            noob.data[idx + 3] = 255;
+			var out = y * (width * 4) + ((width-1-x) * 4)
+            noob.data[out] = (Math.abs(r - rt) < th ? 255 : 0);
+            noob.data[++out] = (Math.abs(g - gt) < th ? 255 : 0);
+            noob.data[++out] = (Math.abs(b - bt) < th ? 255 : 0);
+            noob.data[++out] = 255;
 
             rt |= b;
             gt |= r;
