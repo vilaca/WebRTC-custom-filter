@@ -1,22 +1,25 @@
+
 'use strict';
 
-const video = document.querySelector('video');
 const canvas = window.canvas = document.querySelector('canvas');
+const video = document.querySelector('video');
 const fx = document.getElementById("fx");
+
 const ctxCanvas = canvas.getContext("2d");
 const ctxFx = fx.getContext("2d");
 
-const width = 600;
-const height = 300;
+const width = 320;
+const height = 240;
+const stretch = 4;
 
-canvas.width = width;
 canvas.height = height;
+canvas.width = width;
 
-fx.width = width;
-fx.height = height;
+fx.height = height * stretch;
+fx.width = width * stretch;
 
-var bbb = 0;
 const th = 200;
+var bbb = 0;
 
 function takepicture() {
 
@@ -29,14 +32,15 @@ function takepicture() {
         bt = 0;
 
 	const latest = ctxCanvas.getImageData(0,0,width,height);
-	const noob = ctxCanvas.getImageData(0,0,width,height);
 
     for (var x = 0; x < canvas.width; x++) {
         for (var y = 0; y < canvas.height; y++) {
 
-			var r = latest.data[((y * (latest.width * 4)) + (x * 4)) + 0];
-			var g = latest.data[((y * (latest.width * 4)) + (x * 4)) + 1];
-			var b = latest.data[((y * (latest.width * 4)) + (x * 4)) + 2];
+			var idx = y * (width * 4) + (x * 4);
+			
+			var r = latest.data[idx];
+			var g = latest.data[++idx];
+			var b = latest.data[++idx];
 
             ctxFx.fillStyle = "rgba(" + (Math.abs(r - rt) < th ? 255 : 0) + "," + (Math.abs(g - gt) < th ? 255 : 0) + "," + (Math.abs(b - bt) < th ? 255 : 0) + ",255)";
 
@@ -44,9 +48,8 @@ function takepicture() {
             gt |= r;
             bt |= g;
 			
-			ctxFx.fillRect(x, y, 1, 1);
-
-        }
+			ctxFx.fillRect(x * stretch, y * stretch,  stretch,  stretch);
+		}
     }
 
 };
